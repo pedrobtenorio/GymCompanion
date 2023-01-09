@@ -10,11 +10,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Division")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdDate", "lastUpdatedDate"}, allowGetters = true)
 @Getter
 @Setter
 public class Division {
@@ -26,6 +26,9 @@ public class Division {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    List<Exercise> exerciseList;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

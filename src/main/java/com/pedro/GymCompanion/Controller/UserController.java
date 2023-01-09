@@ -2,8 +2,9 @@ package com.pedro.GymCompanion.Controller;
 
 
 import com.pedro.GymCompanion.Domain.AuthResponse;
+import com.pedro.GymCompanion.Domain.Exercise;
 import com.pedro.GymCompanion.Domain.User;
-import com.pedro.GymCompanion.Security.AccessToken;
+import com.pedro.GymCompanion.Repository.UserRepository;
 import com.pedro.GymCompanion.Security.Credential;
 import com.pedro.GymCompanion.Service.UserService;
 import io.swagger.annotations.*;
@@ -13,14 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/users")
 public class UserController {
     final private UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 
@@ -32,8 +37,13 @@ public class UserController {
 
     })
     @GetMapping("/{id}")
-    public User retrieve(@PathVariable Long id) {
-        return this.userService.findById(id);
+    public User getUserById(@PathVariable Long id) {
+        return this.userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @ApiOperation(value = "create Method, Create user")
