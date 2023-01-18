@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import java.util.Optional;
 
@@ -34,29 +36,22 @@ public class UserService {
     public UserService (PasswordEncoder passwordEncoder, UserRepository userRepository, AuthenticationManager authManager, JwtTokenUtil jwtTokenUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-
         this.authManager = authManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public User save(User user) {
-        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+    public User save(User user) throws Exception {
+        if(userRepository.findByUsername(user.getUsername()).isPresent() || userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        if(!validateEmail(user.getEmail())){
+            throw new Exception("Invalid email address: " + user.getEmail());
         }
         user.setPassword(this.encodePassword(user.getPassword()));
 
         return userRepository.save(user);
     }
 
-    public User findById(Long id) {
-        Optional<User> userOptional = this.userRepository.findById(id);
-        if(userOptional.isPresent()) {
-            return userOptional.get();
-        }
-        else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
 
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -84,6 +79,18 @@ public class UserService {
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+
+    private static boolean validateEmail(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
     }
 
 

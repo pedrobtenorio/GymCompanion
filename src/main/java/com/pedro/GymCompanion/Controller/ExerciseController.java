@@ -36,7 +36,7 @@ public class ExerciseController {
 
     @GetMapping("/{id}")
     public Exercise getExerciseById(@PathVariable Long id) {
-        return exerciseRepository.findById(id)
+        return this.exerciseRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

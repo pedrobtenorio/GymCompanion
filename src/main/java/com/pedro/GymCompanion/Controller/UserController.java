@@ -51,7 +51,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "User created"),
     })
     @PostMapping("/create")
-    public User create(@RequestBody User user) {
+    public User create(@RequestBody User user) throws Exception {
         return this.userService.save(user);
     }
 
@@ -63,5 +63,15 @@ public class UserController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(@RequestBody Credential credential) {
         return this.userService.authenticate(credential);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        userRepository.delete(user);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -21,7 +21,9 @@ public class ExerciseBase {
     private Long id;
     private String name;
     private String description;
-    private String image;
+    @Lob
+    @Column(name = "image", nullable = true, columnDefinition = "mediumblob")
+    private byte[] image;
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
