@@ -23,28 +23,13 @@ public class ExerciseBaseService {
         this.exerciseBaseRepository = exerciseBaseRepository;
     }
 
-    public ExerciseBase save(ExerciseBase exerciseBase, MultipartFile imageFile) {
-        if(!imageFile.isEmpty()){
-            try {
-                exerciseBase.setImage(imageFile.getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to save image", e);
-            }
-        }
-
+    public ExerciseBase save(ExerciseBase exerciseBase) {
         return exerciseBaseRepository.save(exerciseBase);
     }
 
-    public ExerciseBase update( Long id, ExerciseBase exerciseBase, MultipartFile imageFile) {
+    public ExerciseBase update( Long id, ExerciseBase exerciseBase) {
         ExerciseBase exerciseBaseToUpdate = exerciseBaseRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if(!imageFile.isEmpty()){
-            try {
-                exerciseBaseToUpdate.setImage(imageFile.getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to save image", e);
-            }
-        }
         exerciseBaseToUpdate.setName(exerciseBase.getName());
         exerciseBaseToUpdate.setDescription(exerciseBase.getDescription());
         return exerciseBaseRepository.save(exerciseBaseToUpdate);

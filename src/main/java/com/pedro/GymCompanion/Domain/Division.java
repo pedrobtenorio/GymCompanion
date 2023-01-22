@@ -27,7 +27,7 @@ public class Division {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     List<Exercise> exerciseList;
 
     @LastModifiedDate

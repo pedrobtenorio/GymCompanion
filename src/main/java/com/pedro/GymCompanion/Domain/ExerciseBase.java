@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ExerciseBase")
@@ -21,9 +22,8 @@ public class ExerciseBase {
     private Long id;
     private String name;
     private String description;
-    @Lob
-    @Column(name = "image", nullable = true, columnDefinition = "mediumblob")
-    private byte[] image;
+    @OneToMany(mappedBy = "exerciseBase")
+    private List<Exercise> exercises;
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;

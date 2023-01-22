@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: db/changelog/00000000000000_initial_schema.sql

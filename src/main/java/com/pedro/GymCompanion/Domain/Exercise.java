@@ -26,6 +26,9 @@ public class Exercise {
     private Long rest;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    private Division division;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private ExerciseBase exerciseBase;
 
     @CreatedDate

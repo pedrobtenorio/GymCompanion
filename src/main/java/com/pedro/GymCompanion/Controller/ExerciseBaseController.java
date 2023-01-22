@@ -24,8 +24,8 @@ public class ExerciseBaseController {
     }
 
     @PostMapping
-    public ExerciseBase create(@RequestBody ExerciseBase exerciseBase, @RequestParam(required = false) MultipartFile imageFile) {
-        return this.exerciseBaseService.save(exerciseBase, imageFile);
+    public ExerciseBase create(@RequestBody ExerciseBase exerciseBase) {
+        return this.exerciseBaseService.save(exerciseBase);
     }
 
     @GetMapping("/{id}")
@@ -35,8 +35,8 @@ public class ExerciseBaseController {
     }
 
     @PutMapping("/{id}")
-    public ExerciseBase update(@PathVariable Long id, @RequestBody ExerciseBase exerciseBase, @RequestParam(required = false) MultipartFile imageFile) {
-        return this.exerciseBaseService.update(id, exerciseBase, imageFile);
+    public ExerciseBase update(@PathVariable Long id, @RequestBody ExerciseBase exerciseBase) {
+        return this.exerciseBaseService.update(id, exerciseBase);
     }
 
     // Delete
